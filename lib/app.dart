@@ -1,4 +1,6 @@
 import 'package:chat_app/route/app_routes.dart';
+import 'package:chat_app/screen/auth/login.dart';
+import 'package:chat_app/screen/auth/register.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -17,6 +19,7 @@ class MyApp extends StatelessWidget {
         child: GetMaterialApp(
           debugShowCheckedModeBanner: false,
           getPages: Routes.pages,
+          home: RegisterScreen(),
         ),
       ),
     );

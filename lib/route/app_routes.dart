@@ -6,17 +6,17 @@ import 'package:chat_app/screen/splash/splash_screen.dart';
 import 'package:get/get.dart';
 
 class Routes {
-  static String splash = '/';
+  // static String splash = '/';
   static String login = '/login';
   static String register = '/register';
   static String home = '/home';
   static String chat = '/chat';
 
   static List<GetPage> pages = [
-    GetPage(
-      name: splash,
-      page: () => const SplashScreen(),
-    ),
+    // GetPage(
+    //   name: splash,
+    //   page: () => const SplashScreen(),
+    // ),
     GetPage(
       name: login,
       page: () => const LoginScreen(),
