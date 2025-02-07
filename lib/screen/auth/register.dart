@@ -1,9 +1,11 @@
 import 'package:chat_app/controller/register_controller.dart';
 import 'package:chat_app/extention.dart';
+import 'package:chat_app/service/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:rive/rive.dart';
+import 'package:toastification/toastification.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -76,18 +78,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Column(
           children: [
             const SizedBox(height: 32),
-            Container(
-              height: 64,
-              width: 64,
-              padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-              ),
-            ),
-            const SizedBox(height: 32),
             Text(
-              "LogIn",
+              "SIGNUP",
               style: Theme.of(context).textTheme.headlineMedium,
               textAlign: TextAlign.center,
             ),
@@ -145,6 +137,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ? "email is not valid"
                                 : null,
                         decoration: const InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.email,
+                            color: Colors.grey,
+                          ),
                           border: InputBorder.none,
                           hintText: "Email",
                         ),
@@ -194,7 +190,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         );
                       }),
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 8),
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
@@ -204,32 +200,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         horizontal: 16,
                         vertical: 8,
                       ),
-                      child: TextFormField(
-                        focusNode: cPasswordFocusNode,
-                        controller: cPasswordController,
-                        validator: (val) =>
-                            val!.isEmpty ? "required confirm password.." : null,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "Confirm Password",
-                          prefixIcon: Icon(
-                            Icons.lock,
-                            color: Colors.grey,
-                          ),
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              controllerRegister.changeVisibilityCPassword();
-                            },
-                            icon: Icon(
-                              (controllerRegister.isCPassword.value)
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
+                      child: Obx(() {
+                        return TextFormField(
+                          focusNode: cPasswordFocusNode,
+                          controller: cPasswordController,
+                          validator: (val) => val!.isEmpty
+                              ? "required confirm password.."
+                              : null,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "Confirm Password",
+                            prefixIcon: Icon(
+                              Icons.lock,
+                              color: Colors.grey,
+                            ),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                controllerRegister.changeVisibilityCPassword();
+                              },
+                              icon: Icon(
+                                (controllerRegister.isCPassword.value)
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                              ),
                             ),
                           ),
-                        ),
-                        style: Theme.of(context).textTheme.bodyMedium,
-                        onChanged: (value) {},
-                      ),
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          onChanged: (value) {},
+                        );
+                      }),
                     ),
                     const SizedBox(height: 32),
                     SizedBox(
@@ -240,25 +239,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           emailFocusNode.unfocus();
                           passwordFocusNode.unfocus();
                           cPasswordFocusNode.unfocus();
-
-                          final email = emailController.text;
-                          final password = passwordController.text;
-                          final cPassword = cPasswordController.text;
-
-                          if (mounted) Navigator.pop(context);
-
-                          if (email != null) {
+                          if (registerKey.currentState!.validate() &&
+                              controllerRegister.image != null) {
                             trigSuccess?.change(true);
-                          } else {
-                            trigFail?.change(true);
+                            String userName = userNameContrller.text.trim();
+                            String email = emailController.text.trim();
+                            String password = passwordController.text.trim();
+                            String cPassword = cPasswordController.text.trim();
+
+                            if (password == cPassword) {
+                              String image = await APIService.apiService
+                                  .uploadUserImage(
+                                      image: controllerRegister.image!);
+
+                              controllerRegister.registerNewUser(
+                                userName: userName,
+                                email: email,
+                                password: password,
+                                image: image,
+                              );
+                            } else {
+                              trigFail?.change(true);
+                              toastification.show(
+                                title: const Text("ERROR"),
+                                description: const Text(
+                                  "password and conform password had not matched",
+                                ),
+                                autoCloseDuration: const Duration(
+                                  seconds: 3,
+                                ),
+                                type: ToastificationType.error,
+                                style: ToastificationStyle.flatColored,
+                              );
+                            }
                           }
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
+                          backgroundColor: Color(0xff518cf7),
                         ),
-                        child: const Text("SignUP"),
+                        child: const Text(
+                          "SignUP",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
                   ],
