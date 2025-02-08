@@ -20,6 +20,7 @@ class ChatPage extends StatelessWidget {
     TextEditingController msgController = TextEditingController();
     TextEditingController editMSGController = TextEditingController();
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -58,12 +59,6 @@ class ChatPage extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () async {
-                    // await NotificationService.notificationService
-                    //     .showPeriodicNotification(
-                    //   title: "Periodic",
-                    //   body: "This is a periodic notification 😆",
-                    // );
-
                     await NotificationService.notificationService
                         .showBigPictureNotification(
                       title: user.name,
@@ -210,8 +205,8 @@ class ChatPage extends StatelessWidget {
                                                         },
                                                         icon: Icon(
                                                           Icons.edit,
-                                                          color: Colors
-                                                              .green.shade200,
+                                                          color:
+                                                              Color(0xff4C7690),
                                                         ),
                                                       ),
                                                     ],
@@ -262,8 +257,7 @@ class ChatPage extends StatelessWidget {
                                       );
                               })
                           : Center(
-                              child: Image.network(
-                                  'https://cdn.dribbble.com/users/172747/screenshots/3135893/peas-nochats.gif'),
+                              child: Image.asset('asset/GIF/wait.gif'),
                             );
                     }
                     return Container();
@@ -292,21 +286,6 @@ class ChatPage extends StatelessWidget {
                           body: val,
                           token: user.token,
                         );
-
-                        // await NotificationService.notificationService
-                        //     .showSimpleNotification(
-                        //   title: user.name,
-                        //   body: val,
-                        // );
-                        //
-                        // await NotificationService.notificationService
-                        //     .showScheduledNotification(
-                        //   title: "Scheduled",
-                        //   body: "This notification is scheduled...",
-                        //   scheduledDate: DateTime.now().add(
-                        //     const Duration(seconds: 10),
-                        //   ),
-                        // );
                       }
 
                       msgController.clear();

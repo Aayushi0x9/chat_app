@@ -21,7 +21,7 @@ class SplashScreen extends StatelessWidget {
       backgroundColor: const Color(0xfff2f6fa),
       body: Center(
         child: Image.asset(
-          'assets/GIF/logo.gif',
+          'asset/GIF/logo.gif',
         ),
       ),
     );
