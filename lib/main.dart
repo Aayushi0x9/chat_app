@@ -8,13 +8,13 @@ import 'app.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // await Firebase.initializeApp(
-  //     // options: DefaultFirebaseOptions.currentPlatform,
-  //     );
-  //
-  // tz.initializeTimeZones();
-  //
-  // await NotificationService.notificationService.initNotification();
+  await Firebase.initializeApp(
+      // options: DefaultFirebaseOptions.currentPlatform,
+      );
+
+  tz.initializeTimeZones();
+
+  await NotificationService.notificationService.initNotification();
 
   runApp(
     const MyApp(),
