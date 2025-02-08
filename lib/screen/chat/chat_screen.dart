@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:chat_app/model/chat_model.dart';
 import 'package:chat_app/model/user_model.dart';
 import 'package:chat_app/service/auth_service.dart';
+import 'package:chat_app/service/fcm_service.dart';
 import 'package:chat_app/service/firestore_service.dart';
 import 'package:chat_app/service/local_notification_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -285,21 +286,27 @@ class ChatPage extends StatelessWidget {
                             time: Timestamp.now(),
                           ),
                         );
-
-                        await NotificationService.notificationService
-                            .showSimpleNotification(
-                          title: user.name,
+                        await FCMService.fcmService.sendFCM(
+                          title:
+                              AuthService.authService.currentUser!.email ?? "",
                           body: val,
+                          token: user.token,
                         );
 
-                        await NotificationService.notificationService
-                            .showScheduledNotification(
-                          title: "Scheduled",
-                          body: "This notification is scheduled...",
-                          scheduledDate: DateTime.now().add(
-                            const Duration(seconds: 10),
-                          ),
-                        );
+                        // await NotificationService.notificationService
+                        //     .showSimpleNotification(
+                        //   title: user.name,
+                        //   body: val,
+                        // );
+                        //
+                        // await NotificationService.notificationService
+                        //     .showScheduledNotification(
+                        //   title: "Scheduled",
+                        //   body: "This notification is scheduled...",
+                        //   scheduledDate: DateTime.now().add(
+                        //     const Duration(seconds: 10),
+                        //   ),
+                        // );
                       }
 
                       msgController.clear();
@@ -328,20 +335,26 @@ class ChatPage extends StatelessWidget {
                         ),
                       );
 
-                      await NotificationService.notificationService
-                          .showSimpleNotification(
-                        title: user.name,
+                      await FCMService.fcmService.sendFCM(
+                        title: AuthService.authService.currentUser!.email ?? "",
                         body: msg,
+                        token: user.token,
                       );
 
-                      await NotificationService.notificationService
-                          .showScheduledNotification(
-                        title: "Scheduled",
-                        body: "This notification is scheduled...",
-                        scheduledDate: DateTime.now().add(
-                          const Duration(seconds: 10),
-                        ),
-                      );
+                      // await NotificationService.notificationService
+                      //     .showSimpleNotification(
+                      //   title: user.name,
+                      //   body: msg,
+                      // );
+                      //
+                      // await NotificationService.notificationService
+                      //     .showScheduledNotification(
+                      //   title: "Scheduled",
+                      //   body: "This notification is scheduled...",
+                      //   scheduledDate: DateTime.now().add(
+                      //     const Duration(seconds: 10),
+                      //   ),
+                      // );
                     }
 
                     msgController.clear();

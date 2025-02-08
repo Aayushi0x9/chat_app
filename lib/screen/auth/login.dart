@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chat_app/controller/login_vontroller.dart';
 import 'package:chat_app/extention.dart';
 import 'package:chat_app/route/app_routes.dart';
@@ -5,7 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:rive/rive.dart';
+import 'package:rive/rive.dart' hide Image;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -63,22 +65,28 @@ class _LoginScreenState extends State<LoginScreen> {
     print("Build Called Again");
     return Scaffold(
       backgroundColor: const Color(0xFFD6E2EA),
+      // backgroundColor: const Color(0xFF033C61),
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
-            const SizedBox(height: 32),
+            SizedBox(
+              height: 80.h,
+            ),
             Text(
               "LogIn",
               style: Theme.of(context).textTheme.headlineMedium,
               textAlign: TextAlign.center,
             ),
             SizedBox(
+              height: 20.h,
+            ),
+            SizedBox(
               height: 250,
               width: 250,
               child: RiveAnimation.asset(
-                "assets/login-teddy.riv",
+                "asset/rive/login-teddy.riv",
                 fit: BoxFit.fitHeight,
                 stateMachines: const ["Login Machine"],
                 onInit: (artboard) {
@@ -120,6 +128,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         vertical: 8,
                       ),
                       child: TextFormField(
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.emailAddress,
                         focusNode: emailFocusNode,
                         controller: emailController,
                         validator: (val) => val!.isEmpty
@@ -153,6 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       child: Obx(() {
                         return TextFormField(
+                          textInputAction: TextInputAction.done,
                           focusNode: passwordFocusNode,
                           controller: passwordController,
                           validator: (val) =>
@@ -186,34 +197,30 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: ElevatedButton(
                         onPressed: () async {
                           if (loginKey.currentState!.validate()) {
+                            trigSuccess?.change(true);
                             controllerLoin.loginNewUser(
                               email: emailController.text.trim(),
                               password: passwordController.text.trim(),
                             );
+                          } else {
+                            trigFail?.change(true);
+                            log('Failed===============>');
                           }
                           emailFocusNode.unfocus();
                           passwordFocusNode.unfocus();
-
-                          final email = emailController.text;
-                          final password = passwordController.text;
-
-                          if (mounted) Navigator.pop(context);
-
-                          if (email != null) {
-                            trigSuccess?.change(true);
-                          } else {
-                            trigFail?.change(true);
-                          }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xff518cf7),
+                          backgroundColor: Color(0xff4C7690),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
                         ),
-                        child: const Text(
-                          "Login",
-                          style: TextStyle(color: Colors.white),
+                        child: Text(
+                          "LOGIN",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.sp),
                         ),
                       ),
                     ),
@@ -224,17 +231,46 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(
               height: 20.h,
             ),
-            Align(
-              child: GestureDetector(
-                onTap: () {
-                  controllerLoin.signInWithGoogle();
-                },
-                child: Icon(
-                  Icons.g_mobiledata_rounded,
-                  size: 40.sp,
-                  color: Colors.black,
+            Row(
+              children: [
+                Expanded(
+                  child: Divider(),
                 ),
-              ),
+                Text('  OR  '),
+                Expanded(
+                  child: Divider(),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 20.h,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                GestureDetector(
+                    onTap: () {
+                      controllerLoin.signInWithGoogle();
+                    },
+                    child: Image.asset(
+                      'asset/icons/google.png',
+                      height: 50.h,
+                      width: 50.w,
+                    )),
+                Image.asset(
+                  'asset/icons/github.png',
+                  height: 50.h,
+                  width: 50.w,
+                ),
+                Image.asset(
+                  'asset/icons/apple.png',
+                  height: 50.h,
+                  width: 50.w,
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 110.h,
             ),
             Text.rich(
               TextSpan(
@@ -246,11 +282,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       ..onTap = () {
                         Get.toNamed(Routes.register);
                       },
-                    style: const TextStyle(
-                      color: Color(0xff518cf7),
+                    style: TextStyle(
+                      color: Color(0xff4C7690),
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                       decoration: TextDecoration.underline,
-                      decorationColor: Color(0xff518cf7),
+                      decorationColor: Color(0xff4C7690),
                     ),
                   )
                 ],

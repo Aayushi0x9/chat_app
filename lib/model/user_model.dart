@@ -4,6 +4,7 @@ class UserModel {
   String email;
   String password;
   String image;
+  String token;
 
   UserModel({
     required this.uid,
@@ -11,6 +12,7 @@ class UserModel {
     required this.email,
     required this.password,
     required this.image,
+    required this.token,
   });
 
   factory UserModel.fromMap({required Map<String, dynamic> data}) => UserModel(
@@ -19,6 +21,7 @@ class UserModel {
         email: data['email'],
         password: data['password'],
         image: data['image'],
+        token: data['token'],
       );
 
   Map<String, dynamic> get toMap => {
@@ -27,5 +30,6 @@ class UserModel {
         'email': email,
         'password': password,
         'image': image,
+        'token': token,
       };
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:chat_app/model/user_model.dart';
 import 'package:chat_app/service/auth_service.dart';
 import 'package:chat_app/service/firestore_service.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -42,6 +43,7 @@ class RegisterController extends GetxController {
           email: email,
           password: password,
           image: image,
+          token: await FirebaseMessaging.instance.getToken() ?? "",
         ),
       );
 

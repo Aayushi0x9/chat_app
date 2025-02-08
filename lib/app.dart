@@ -19,7 +19,6 @@ class MyApp extends StatelessWidget {
         child: GetMaterialApp(
           debugShowCheckedModeBanner: false,
           getPages: Routes.pages,
-          home: RegisterScreen(),
         ),
       ),
     );

@@ -1,7 +1,10 @@
 import 'package:chat_app/controller/register_controller.dart';
 import 'package:chat_app/extention.dart';
+import 'package:chat_app/route/app_routes.dart';
 import 'package:chat_app/service/api_service.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:rive/rive.dart';
@@ -69,15 +72,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("Build Called Again");
     return Scaffold(
       backgroundColor: const Color(0xFFD6E2EA),
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 32),
+            SizedBox(
+              height: 40.h,
+            ),
             Text(
               "SIGNUP",
               style: Theme.of(context).textTheme.headlineMedium,
@@ -87,7 +92,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               height: 250,
               width: 250,
               child: RiveAnimation.asset(
-                "assets/login-teddy.riv",
+                "asset/rive/login-teddy.riv",
                 fit: BoxFit.fitHeight,
                 stateMachines: const ["Login Machine"],
                 onInit: (artboard) {
@@ -119,6 +124,69 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Center(
+                      child: Stack(
+                        alignment: Alignment.bottomRight,
+                        children: [
+                          GetBuilder<RegisterController>(builder: (context) {
+                            return CircleAvatar(
+                              radius: 65.w,
+                              foregroundImage:
+                                  (controllerRegister.image != null)
+                                      ? FileImage(controllerRegister.image!)
+                                      : null,
+                              child: (controllerRegister.image != null)
+                                  ? const Text("")
+                                  : Icon(
+                                      Icons.person,
+                                      size: 45.sp,
+                                    ),
+                            );
+                          }),
+                          FloatingActionButton.small(
+                            onPressed: () {
+                              controllerRegister.pickUserImage();
+                            },
+                            child: const Icon(Icons.add_a_photo_outlined),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      child: Obx(() {
+                        return TextFormField(
+                          textInputAction: TextInputAction.done,
+                          focusNode: cPasswordFocusNode,
+                          controller: cPasswordController,
+                          obscureText: controllerRegister.isCPassword.value,
+                          validator: (val) => val!.isEmpty
+                              ? "required confirm password.."
+                              : null,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "Confirm Password",
+                            prefixIcon: Icon(
+                              Icons.person,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          onChanged: (value) {},
+                        );
+                      }),
+                    ),
+                    const SizedBox(height: 8),
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
@@ -129,6 +197,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         vertical: 8,
                       ),
                       child: TextFormField(
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.emailAddress,
                         focusNode: emailFocusNode,
                         controller: emailController,
                         validator: (val) => val!.isEmpty
@@ -153,7 +223,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(height: 8),
                     Container(
                       decoration: BoxDecoration(
-                        color: Colors.grey[200],
+                        color: Colors.grey.shade200,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       padding: const EdgeInsets.symmetric(
@@ -162,6 +232,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       child: Obx(() {
                         return TextFormField(
+                          textInputAction: TextInputAction.next,
                           focusNode: passwordFocusNode,
                           controller: passwordController,
                           obscureText: controllerRegister.isPassword.value,
@@ -202,8 +273,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       child: Obx(() {
                         return TextFormField(
+                          textInputAction: TextInputAction.done,
                           focusNode: cPasswordFocusNode,
                           controller: cPasswordController,
+                          obscureText: controllerRegister.isCPassword.value,
                           validator: (val) => val!.isEmpty
                               ? "required confirm password.."
                               : null,
@@ -272,24 +345,64 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 style: ToastificationStyle.flatColored,
                               );
                             }
+                          } else {
+                            toastification.show(
+                              title: const Text("ERROR"),
+                              description: const Text(
+                                "Image Required",
+                              ),
+                              autoCloseDuration: const Duration(
+                                seconds: 3,
+                              ),
+                              type: ToastificationType.error,
+                              style: ToastificationStyle.flatColored,
+                            );
                           }
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          backgroundColor: Color(0xff518cf7),
+                          backgroundColor: Color(0xff4C7690),
+                          // Color(0xff518cf7),
                         ),
-                        child: const Text(
-                          "SignUP",
-                          style: TextStyle(color: Colors.white),
+                        child: Text(
+                          "SIGNUP",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.sp),
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-            )
+            ),
+            SizedBox(
+              height: 40.h,
+            ),
+            Text.rich(
+              TextSpan(
+                text: "Don't have an account ? ",
+                children: [
+                  TextSpan(
+                    text: "Login",
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Get.back();
+                      },
+                    style: TextStyle(
+                      color: Color(0xff4C7690),
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w900,
+                      decoration: TextDecoration.underline,
+                      decorationColor: Color(0xff4C7690),
+                    ),
+                  )
+                ],
+              ),
+            ),
           ],
         ),
       ),
